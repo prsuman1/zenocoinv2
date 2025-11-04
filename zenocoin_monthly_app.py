@@ -163,11 +163,7 @@ light_css = """
 </style>
 """
 
-# Apply theme
-if st.session_state.dark_mode:
-    st.markdown(dark_css, unsafe_allow_html=True)
-else:
-    st.markdown(light_css, unsafe_allow_html=True)
+# Theme application moved to main() function
 
 # Load data
 @st.cache_data
@@ -222,6 +218,12 @@ def get_plotly_theme():
 
 # Main app
 def main():
+    # Apply CSS theme based on dark mode setting
+    if st.session_state.dark_mode:
+        st.markdown(dark_css, unsafe_allow_html=True)
+    else:
+        st.markdown(light_css, unsafe_allow_html=True)
+    
     # Header with theme toggle
     col_title, col_toggle = st.columns([10, 1])
     
@@ -1831,28 +1833,9 @@ def show_new_user_cohorts(df):
         </div>
         """, unsafe_allow_html=True)
 
-def get_chart_theme():
-    """Get chart theme based on dark mode setting"""
-    if st.session_state.dark_mode:
-        return {
-            'template': 'plotly_dark',
-            'paper_bgcolor': '#1e1e1e',
-            'plot_bgcolor': '#1e1e1e',
-            'font_color': '#ffffff',
-            'gridcolor': '#444444'
-        }
-    else:
-        return {
-            'template': 'plotly_white',
-            'paper_bgcolor': 'white',
-            'plot_bgcolor': 'white',
-            'font_color': '#333333',
-            'gridcolor': '#e0e0e0'
-        }
-
 def show_zc_adoption_impact(df):
     """Show behavior change analysis after ZC adoption"""
-    theme = get_chart_theme()
+    theme = get_plotly_theme()
     
     st.markdown("## 🔄 ZC Adoption Impact Analysis")
     st.markdown("### How Customer Behavior Changes After First ZenoCoin Usage")
