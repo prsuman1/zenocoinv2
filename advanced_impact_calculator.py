@@ -148,18 +148,18 @@ class AdvancedImpactCalculator:
         base_spend = self.current_avg_monthly_spend_non_zc
         lift_factor = 1 + (self.spend_lift_per_user / base_spend)
         
-        # Apply network effects
-        network_boost = 1 + (self.network_effect * effective_rate)
-        
-        # Average monthly amount per user (with network effects)
-        avg_monthly_per_user = base_spend * lift_factor * network_boost
+        # Average monthly amount per user (constant based on historical data)
+        # ZC users consistently spend ₹1,088 regardless of how many users there are
+        avg_monthly_per_user = self.current_avg_monthly_spend_zc  # Use actual ZC user spend
         results['avg_monthly_amount_per_user'] = round(avg_monthly_per_user, 2)
         
         # 3. Calculate incremental revenue
-        # Consider cannibalization and true incrementality
+        # The incremental value per ZC user is the difference between ZC and non-ZC spend
+        # This is ₹1,088 - ₹624 = ₹464 per user per month
         incrementality_rate = self._calculate_incrementality(effective_rate)
         
-        incremental_spend_per_user = (avg_monthly_per_user - base_spend) * incrementality_rate
+        # Use the actual spend lift from data
+        incremental_spend_per_user = self.spend_lift_per_user * incrementality_rate
         
         # Revenue is based on INCREMENTAL users only
         if incremental_coin_users > 0:
