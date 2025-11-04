@@ -1831,6 +1831,25 @@ def show_new_user_cohorts(df):
         </div>
         """, unsafe_allow_html=True)
 
+def get_chart_theme():
+    """Get chart theme based on dark mode setting"""
+    if st.session_state.dark_mode:
+        return {
+            'template': 'plotly_dark',
+            'paper_bgcolor': '#1e1e1e',
+            'plot_bgcolor': '#1e1e1e',
+            'font_color': '#ffffff',
+            'gridcolor': '#444444'
+        }
+    else:
+        return {
+            'template': 'plotly_white',
+            'paper_bgcolor': 'white',
+            'plot_bgcolor': 'white',
+            'font_color': '#333333',
+            'gridcolor': '#e0e0e0'
+        }
+
 def show_zc_adoption_impact(df):
     """Show behavior change analysis after ZC adoption"""
     theme = get_chart_theme()
