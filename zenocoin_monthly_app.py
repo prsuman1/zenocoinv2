@@ -1097,10 +1097,17 @@ def show_roi_calculator(summary, monthly_trends):
             )
         
         with col2:
+            # Calculate the change from current average
+            current_zc_users = results.get('current_coin_users', 3360)
+            current_non_zc = 16000 - current_zc_users
+            current_avg = (current_zc_users * 1088 + current_non_zc * 624) / 16000
+            avg_change = results['avg_monthly_amount_per_user'] - current_avg
+            
             st.metric(
-                "2. Avg Monthly Amount/User",
+                "Overall Avg Spend/User",
                 f"₹{results['avg_monthly_amount_per_user']:,.0f}",
-                help="Expected spend per ZC user"
+                delta=f"₹{avg_change:+.0f}",
+                help="Blended average spend across ALL users (ZC + non-ZC)"
             )
         
         with col3:

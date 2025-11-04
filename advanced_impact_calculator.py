@@ -148,10 +148,18 @@ class AdvancedImpactCalculator:
         base_spend = self.current_avg_monthly_spend_non_zc
         lift_factor = 1 + (self.spend_lift_per_user / base_spend)
         
-        # Average monthly amount per user (constant based on historical data)
-        # ZC users consistently spend ₹1,088 regardless of how many users there are
-        avg_monthly_per_user = self.current_avg_monthly_spend_zc  # Use actual ZC user spend
-        results['avg_monthly_amount_per_user'] = round(avg_monthly_per_user, 2)
+        # Calculate OVERALL average monthly amount per user (blended average)
+        # This changes based on the mix of ZC and non-ZC users
+        zc_users_at_target = target_coin_users
+        non_zc_users = eligible_customers - zc_users_at_target
+        
+        # Calculate weighted average spend across all users
+        total_spend = (zc_users_at_target * self.current_avg_monthly_spend_zc + 
+                      non_zc_users * self.current_avg_monthly_spend_non_zc)
+        
+        # Overall average per user (all customers, not just ZC)
+        avg_monthly_per_user_overall = total_spend / eligible_customers if eligible_customers > 0 else 0
+        results['avg_monthly_amount_per_user'] = round(avg_monthly_per_user_overall, 2)
         
         # 3. Calculate incremental revenue
         # The incremental value per ZC user is the difference between ZC and non-ZC spend
